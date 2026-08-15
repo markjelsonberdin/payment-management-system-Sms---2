@@ -1,0 +1,626 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 12, 2026 at 02:50 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `payment_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `billing`
+--
+
+CREATE TABLE `billing` (
+  `billing_id` int(10) UNSIGNED NOT NULL,
+  `student_id` int(10) UNSIGNED NOT NULL,
+  `generated_by` int(10) UNSIGNED DEFAULT NULL,
+  `billing_type` enum('Enrollment','Assessment','Adjustment') NOT NULL,
+  `academic_year` varchar(20) NOT NULL,
+  `semester` enum('1st','2nd','Summer') NOT NULL,
+  `total_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `discount_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `remaining_balance` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `billing_status` enum('Unpaid','Partial','Paid') DEFAULT 'Unpaid',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ;
+
+--
+-- Triggers `billing`
+--
+DELIMITER $$
+CREATE TRIGGER `before_billing_insert` BEFORE INSERT ON `billing` FOR EACH ROW BEGIN
+    -- Initialize remaining balance based on Gross Assessment - Discount
+    SET NEW.remaining_balance = GREATEST(0, NEW.total_amount - NEW.discount_amount);
+    
+    IF NEW.remaining_balance <= 0 THEN
+        SET NEW.billing_status = 'Paid';
+    ELSE
+        SET NEW.billing_status = 'Unpaid';
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `billing_items`
+--
+
+CREATE TABLE `billing_items` (
+  `billing_item_id` int(10) UNSIGNED NOT NULL,
+  `billing_id` int(10) UNSIGNED NOT NULL,
+  `fee_id` int(10) UNSIGNED NOT NULL,
+  `fee_name` varchar(100) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `paid_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `remaining_amount` decimal(10,2) NOT NULL,
+  `status` enum('Unpaid','Partial','Paid') DEFAULT 'Unpaid'
+) ;
+
+--
+-- Triggers `billing_items`
+--
+DELIMITER $$
+CREATE TRIGGER `before_billing_items_insert` BEFORE INSERT ON `billing_items` FOR EACH ROW BEGIN
+    -- Prevent over-payment at DB level
+    IF NEW.paid_amount > NEW.amount THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Paid amount cannot exceed billing item amount.';
+    END IF;
+
+    -- Recalculate remaining_amount
+    SET NEW.remaining_amount = NEW.amount - NEW.paid_amount;
+
+    -- Set Status
+    IF NEW.remaining_amount <= 0 THEN
+        SET NEW.status = 'Paid';
+    ELSEIF NEW.paid_amount > 0 THEN
+        SET NEW.status = 'Partial';
+    ELSE
+        SET NEW.status = 'Unpaid';
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `before_billing_items_update` BEFORE UPDATE ON `billing_items` FOR EACH ROW BEGIN
+    -- Prevent over-payment at DB level
+    IF NEW.paid_amount > NEW.amount THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Paid amount cannot exceed billing item amount.';
+    END IF;
+
+    -- Recalculate remaining_amount
+    SET NEW.remaining_amount = NEW.amount - NEW.paid_amount;
+
+    -- Set Status
+    IF NEW.remaining_amount <= 0 THEN
+        SET NEW.status = 'Paid';
+    ELSEIF NEW.paid_amount > 0 THEN
+        SET NEW.status = 'Partial';
+    ELSE
+        SET NEW.status = 'Unpaid';
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fees`
+--
+
+CREATE TABLE `fees` (
+  `fee_id` int(10) UNSIGNED NOT NULL,
+  `category_id` int(10) UNSIGNED DEFAULT NULL,
+  `fee_name` varchar(100) NOT NULL,
+  `default_amount` decimal(10,2) NOT NULL,
+  `is_required` tinyint(1) DEFAULT 1,
+  `status` enum('Active','Inactive') DEFAULT 'Active',
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `fees`
+--
+
+INSERT INTO `fees` (`fee_id`, `category_id`, `fee_name`, `default_amount`, `is_required`, `status`, `description`, `created_at`, `updated_at`) VALUES
+(31, 2, 'Registration', 400.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(33, 2, 'Library', 650.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(34, 2, 'Athletics & Sports Dev. Fee', 500.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(35, 2, 'Cultural Fee', 400.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(36, 2, 'Guidance & Counseling', 400.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(37, 2, 'Energy Fee', 1000.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(38, 2, 'Laboratory Fee', 600.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(39, 2, 'Community & Student Dev. Fee', 600.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(40, 2, 'Insurance', 25.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(41, 2, 'Medical and Dental', 400.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(42, 5, 'Student Handbook', 250.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(43, 5, 'RFID', 500.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45'),
+(45, 5, 'Research Forum 2026', 200.00, 1, 'Active', NULL, '2026-08-12 12:49:45', '2026-08-12 12:49:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fee_categories`
+--
+
+CREATE TABLE `fee_categories` (
+  `category_id` int(10) UNSIGNED NOT NULL,
+  `category_name` varchar(100) NOT NULL,
+  `priority_order` int(11) NOT NULL DEFAULT 0,
+  `status` enum('Active','Inactive') DEFAULT 'Active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `fee_categories`
+--
+
+INSERT INTO `fee_categories` (`category_id`, `category_name`, `priority_order`, `status`) VALUES
+(1, 'Tuition', 1, 'Active'),
+(2, 'Miscellaneous', 2, 'Active'),
+(3, 'Laboratory & Computer', 3, 'Active'),
+(4, 'Student Council & Organization', 4, 'Active'),
+(5, 'Supplementary Fees', 5, 'Active'),
+(6, 'Other', 6, 'Active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ocr_results`
+--
+
+CREATE TABLE `ocr_results` (
+  `ocr_result_id` int(10) UNSIGNED NOT NULL,
+  `concern_id` int(10) UNSIGNED NOT NULL,
+  `extracted_amount` decimal(10,2) DEFAULT NULL,
+  `bank_name` varchar(100) DEFAULT NULL,
+  `confidence_score` decimal(5,2) DEFAULT NULL,
+  `reference_number` varchar(100) DEFAULT NULL,
+  `transaction_date` date DEFAULT NULL,
+  `transaction_time` time DEFAULT NULL,
+  `raw_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`raw_json`))
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `payment_id` int(10) UNSIGNED NOT NULL,
+  `student_id` int(10) UNSIGNED NOT NULL,
+  `billing_id` int(10) UNSIGNED NOT NULL,
+  `verified_by` int(10) UNSIGNED DEFAULT NULL,
+  `transaction_type` enum('Walk-in','Online','Payment Concern') NOT NULL,
+  `payment_method` enum('Walk-in','Online','Bank Transfer') NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `cash_received` decimal(10,2) DEFAULT NULL,
+  `change_amount` decimal(10,2) DEFAULT NULL,
+  `payment_channel` enum('Cash','GCash','Maya','Visa','Mastercard','Bank','PayMongo') NOT NULL,
+  `reference_number` varchar(100) DEFAULT NULL,
+  `payment_status` enum('Pending','Verified','Rejected','Failed') DEFAULT 'Pending',
+  `payment_date` date NOT NULL,
+  `remarks` text DEFAULT NULL,
+  `receipt_number` varchar(50) DEFAULT NULL,
+  `verified_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_allocations`
+--
+
+CREATE TABLE `payment_allocations` (
+  `allocation_id` int(10) UNSIGNED NOT NULL,
+  `payment_id` int(10) UNSIGNED NOT NULL,
+  `billing_item_id` int(10) UNSIGNED NOT NULL,
+  `allocated_amount` decimal(10,2) NOT NULL,
+  `allocated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ;
+
+--
+-- Triggers `payment_allocations`
+--
+DELIMITER $$
+CREATE TRIGGER `after_payment_allocations_insert` AFTER INSERT ON `payment_allocations` FOR EACH ROW BEGIN
+    -- Push the allocation amount up to the billing item
+    -- (This will fire the `before_billing_items_update` trigger)
+    UPDATE `billing_items`
+    SET `paid_amount` = `paid_amount` + NEW.allocated_amount
+    WHERE `billing_item_id` = NEW.billing_item_id;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_concerns`
+--
+
+CREATE TABLE `payment_concerns` (
+  `concern_id` int(10) UNSIGNED NOT NULL,
+  `payment_id` int(10) UNSIGNED DEFAULT NULL,
+  `receipt_path` varchar(255) NOT NULL,
+  `verification_status` enum('Pending','Verified','Rejected') DEFAULT 'Pending',
+  `ocr_status` enum('Processing','Completed','Failed') DEFAULT 'Processing',
+  `remarks` text DEFAULT NULL,
+  `reviewed_by` int(10) UNSIGNED DEFAULT NULL,
+  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `reviewed_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_gateway_settings`
+--
+
+CREATE TABLE `payment_gateway_settings` (
+  `setting_key` varchar(50) NOT NULL,
+  `setting_value` text DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment_gateway_settings`
+--
+
+INSERT INTO `payment_gateway_settings` (`setting_key`, `setting_value`, `description`, `updated_at`) VALUES
+('channel_card', '1', '1 to Enable, 0 to Disable Credit/Debit Cards', '2026-08-12 12:49:45'),
+('channel_gcash', '1', '1 to Enable, 0 to Disable GCash', '2026-08-12 12:49:45'),
+('channel_maya', '1', '1 to Enable, 0 to Disable Maya', '2026-08-12 12:49:45'),
+('fee_policy', 'pass_to_student', 'pass_to_student or absorb_by_school', '2026-08-12 12:49:45'),
+('gateway_mode', 'test', 'Set to live or test mode', '2026-08-12 12:49:45'),
+('paymongo_public_key', '', 'PayMongo Public Key (Stored in .env)', '2026-08-12 12:49:45'),
+('paymongo_secret_key', '', 'PayMongo Secret Key (Stored in .env)', '2026-08-12 12:49:45'),
+('paymongo_webhook_secret', '', 'Webhook Secret (Stored in .env)', '2026-08-12 12:49:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_settings_audit`
+--
+
+CREATE TABLE `payment_settings_audit` (
+  `audit_id` int(11) NOT NULL,
+  `setting_key` varchar(50) DEFAULT NULL,
+  `old_value` text DEFAULT NULL,
+  `new_value` text DEFAULT NULL,
+  `changed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymongo_transactions`
+--
+
+CREATE TABLE `paymongo_transactions` (
+  `paymongo_transaction_id` int(10) UNSIGNED NOT NULL,
+  `payment_id` int(10) UNSIGNED DEFAULT NULL,
+  `checkout_session_id` varchar(150) DEFAULT NULL,
+  `payment_intent_id` varchar(150) DEFAULT NULL,
+  `paymongo_payment_id` varchar(150) DEFAULT NULL,
+  `webhook_event_id` varchar(150) DEFAULT NULL,
+  `event_type` varchar(100) DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `convenience_fee` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `total_charged` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `signature_verified` tinyint(1) NOT NULL DEFAULT 0,
+  `processing_status` enum('Received','Processing','Processed','Failed','Ignored') NOT NULL DEFAULT 'Received',
+  `received_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `processed_at` timestamp NULL DEFAULT NULL
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `scholarships`
+--
+
+CREATE TABLE `scholarships` (
+  `scholarship_id` int(10) UNSIGNED NOT NULL,
+  `student_id` int(10) UNSIGNED NOT NULL,
+  `billing_id` int(10) UNSIGNED DEFAULT NULL,
+  `approved_by` int(10) UNSIGNED DEFAULT NULL,
+  `discount_amount` decimal(10,2) DEFAULT NULL,
+  `scholarship_name` varchar(100) NOT NULL,
+  `discount_type` enum('Percentage','Fixed Amount') NOT NULL,
+  `discount_percentage` decimal(5,2) DEFAULT NULL,
+  `status` enum('Active','Revoked','Expired') DEFAULT 'Active',
+  `approved_at` timestamp NULL DEFAULT NULL
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+CREATE TABLE `students` (
+  `student_id` int(10) UNSIGNED NOT NULL,
+  `student_number` varchar(50) NOT NULL,
+  `full_name` varchar(150) NOT NULL,
+  `course_id` varchar(100) DEFAULT NULL,
+  `year_level` varchar(20) DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'Enrolled',
+  `last_sync_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `billing`
+--
+ALTER TABLE `billing`
+  ADD PRIMARY KEY (`billing_id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `generated_by` (`generated_by`),
+  ADD KEY `idx_billing_status` (`billing_status`);
+
+--
+-- Indexes for table `billing_items`
+--
+ALTER TABLE `billing_items`
+  ADD PRIMARY KEY (`billing_item_id`),
+  ADD KEY `billing_id` (`billing_id`),
+  ADD KEY `fee_id` (`fee_id`);
+
+--
+-- Indexes for table `fees`
+--
+ALTER TABLE `fees`
+  ADD PRIMARY KEY (`fee_id`),
+  ADD KEY `fk_fees_category` (`category_id`);
+
+--
+-- Indexes for table `fee_categories`
+--
+ALTER TABLE `fee_categories`
+  ADD PRIMARY KEY (`category_id`);
+
+--
+-- Indexes for table `ocr_results`
+--
+ALTER TABLE `ocr_results`
+  ADD PRIMARY KEY (`ocr_result_id`),
+  ADD KEY `concern_id` (`concern_id`);
+
+--
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD UNIQUE KEY `reference_number` (`reference_number`),
+  ADD UNIQUE KEY `receipt_number` (`receipt_number`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `billing_id` (`billing_id`),
+  ADD KEY `idx_payment_status` (`payment_status`),
+  ADD KEY `idx_payment_date` (`payment_date`);
+
+--
+-- Indexes for table `payment_allocations`
+--
+ALTER TABLE `payment_allocations`
+  ADD PRIMARY KEY (`allocation_id`),
+  ADD UNIQUE KEY `uq_payment_billing_item` (`payment_id`,`billing_item_id`),
+  ADD KEY `idx_allocations_payment` (`payment_id`),
+  ADD KEY `idx_allocations_billing_item` (`billing_item_id`);
+
+--
+-- Indexes for table `payment_concerns`
+--
+ALTER TABLE `payment_concerns`
+  ADD PRIMARY KEY (`concern_id`),
+  ADD KEY `payment_id` (`payment_id`);
+
+--
+-- Indexes for table `payment_gateway_settings`
+--
+ALTER TABLE `payment_gateway_settings`
+  ADD PRIMARY KEY (`setting_key`);
+
+--
+-- Indexes for table `payment_settings_audit`
+--
+ALTER TABLE `payment_settings_audit`
+  ADD PRIMARY KEY (`audit_id`);
+
+--
+-- Indexes for table `paymongo_transactions`
+--
+ALTER TABLE `paymongo_transactions`
+  ADD PRIMARY KEY (`paymongo_transaction_id`),
+  ADD UNIQUE KEY `checkout_session_id` (`checkout_session_id`),
+  ADD UNIQUE KEY `payment_intent_id` (`payment_intent_id`),
+  ADD UNIQUE KEY `paymongo_payment_id` (`paymongo_payment_id`),
+  ADD UNIQUE KEY `webhook_event_id` (`webhook_event_id`),
+  ADD KEY `idx_paymongo_payment` (`payment_id`),
+  ADD KEY `idx_paymongo_status` (`processing_status`);
+
+--
+-- Indexes for table `scholarships`
+--
+ALTER TABLE `scholarships`
+  ADD PRIMARY KEY (`scholarship_id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `billing_id` (`billing_id`);
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`student_id`),
+  ADD UNIQUE KEY `student_number` (`student_number`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `billing`
+--
+ALTER TABLE `billing`
+  MODIFY `billing_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `billing_items`
+--
+ALTER TABLE `billing_items`
+  MODIFY `billing_item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `fees`
+--
+ALTER TABLE `fees`
+  MODIFY `fee_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
+--
+-- AUTO_INCREMENT for table `fee_categories`
+--
+ALTER TABLE `fee_categories`
+  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `ocr_results`
+--
+ALTER TABLE `ocr_results`
+  MODIFY `ocr_result_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `payment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment_allocations`
+--
+ALTER TABLE `payment_allocations`
+  MODIFY `allocation_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment_concerns`
+--
+ALTER TABLE `payment_concerns`
+  MODIFY `concern_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment_settings_audit`
+--
+ALTER TABLE `payment_settings_audit`
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `paymongo_transactions`
+--
+ALTER TABLE `paymongo_transactions`
+  MODIFY `paymongo_transaction_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `scholarships`
+--
+ALTER TABLE `scholarships`
+  MODIFY `scholarship_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `student_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `billing`
+--
+ALTER TABLE `billing`
+  ADD CONSTRAINT `billing_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
+
+--
+-- Constraints for table `billing_items`
+--
+ALTER TABLE `billing_items`
+  ADD CONSTRAINT `billing_items_ibfk_1` FOREIGN KEY (`billing_id`) REFERENCES `billing` (`billing_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `billing_items_ibfk_2` FOREIGN KEY (`fee_id`) REFERENCES `fees` (`fee_id`);
+
+--
+-- Constraints for table `fees`
+--
+ALTER TABLE `fees`
+  ADD CONSTRAINT `fk_fees_category` FOREIGN KEY (`category_id`) REFERENCES `fee_categories` (`category_id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `ocr_results`
+--
+ALTER TABLE `ocr_results`
+  ADD CONSTRAINT `ocr_results_ibfk_1` FOREIGN KEY (`concern_id`) REFERENCES `payment_concerns` (`concern_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+  ADD CONSTRAINT `payments_ibfk_2` FOREIGN KEY (`billing_id`) REFERENCES `billing` (`billing_id`);
+
+--
+-- Constraints for table `payment_allocations`
+--
+ALTER TABLE `payment_allocations`
+  ADD CONSTRAINT `fk_allocations_billing_item` FOREIGN KEY (`billing_item_id`) REFERENCES `billing_items` (`billing_item_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_allocations_payment` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `payment_concerns`
+--
+ALTER TABLE `payment_concerns`
+  ADD CONSTRAINT `payment_concerns_ibfk_1` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `paymongo_transactions`
+--
+ALTER TABLE `paymongo_transactions`
+  ADD CONSTRAINT `fk_paymongo_transaction_payment` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `scholarships`
+--
+ALTER TABLE `scholarships`
+  ADD CONSTRAINT `fk_scholarships_billing` FOREIGN KEY (`billing_id`) REFERENCES `billing` (`billing_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `scholarships_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
