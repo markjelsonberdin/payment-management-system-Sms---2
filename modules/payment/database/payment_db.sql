@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 20, 2026 at 02:56 AM
+-- Generation Time: Aug 20, 2026 at 02:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,6 +43,13 @@ CREATE TABLE `billing` (
 ) ;
 
 --
+-- Dumping data for table `billing`
+--
+
+INSERT INTO `billing` (`billing_id`, `student_id`, `generated_by`, `billing_type`, `academic_year`, `semester`, `total_amount`, `discount_amount`, `remaining_balance`, `billing_status`, `created_at`, `updated_at`) VALUES
+(1, 850, 784, 'Enrollment', '2026-2027', '1st', 4975.00, 0.00, 4975.00, 'Unpaid', '2026-08-20 02:59:18', '2026-08-20 02:59:18');
+
+--
 -- Triggers `billing`
 --
 DELIMITER $$
@@ -75,6 +82,22 @@ CREATE TABLE `billing_items` (
   `remaining_amount` decimal(10,2) NOT NULL,
   `status` enum('Unpaid','Partial','Paid') DEFAULT 'Unpaid'
 ) ;
+
+--
+-- Dumping data for table `billing_items`
+--
+
+INSERT INTO `billing_items` (`billing_item_id`, `billing_id`, `fee_id`, `fee_name`, `amount`, `paid_amount`, `remaining_amount`, `status`) VALUES
+(1, 1, 31, 'Registration', 400.00, 0.00, 400.00, 'Unpaid'),
+(2, 1, 33, 'Library', 650.00, 0.00, 650.00, 'Unpaid'),
+(3, 1, 34, 'Athletics & Sports Dev. Fee', 500.00, 0.00, 500.00, 'Unpaid'),
+(4, 1, 35, 'Cultural Fee', 400.00, 0.00, 400.00, 'Unpaid'),
+(5, 1, 36, 'Guidance & Counseling', 400.00, 0.00, 400.00, 'Unpaid'),
+(6, 1, 37, 'Energy Fee', 1000.00, 0.00, 1000.00, 'Unpaid'),
+(7, 1, 38, 'Laboratory Fee', 600.00, 0.00, 600.00, 'Unpaid'),
+(8, 1, 39, 'Community & Student Dev. Fee', 600.00, 0.00, 600.00, 'Unpaid'),
+(9, 1, 40, 'Insurance', 25.00, 0.00, 25.00, 'Unpaid'),
+(10, 1, 41, 'Medical and Dental', 400.00, 0.00, 400.00, 'Unpaid');
 
 --
 -- Triggers `billing_items`
@@ -228,6 +251,16 @@ CREATE TABLE `payments` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ;
 
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `student_id`, `billing_id`, `verified_by`, `transaction_type`, `payment_method`, `amount`, `cash_received`, `change_amount`, `payment_channel`, `reference_number`, `payment_status`, `payment_date`, `remarks`, `receipt_number`, `verified_at`, `created_at`) VALUES
+(1, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, 'PayMongo', 'cs_2dacbdbc128f5d0554eb7f8d', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 03:18:40'),
+(2, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, 'PayMongo', 'cs_c043903b4ebe585747f9ca92', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 03:27:25'),
+(3, 850, 1, NULL, 'Online', 'Online', 1000.00, NULL, NULL, 'PayMongo', 'cs_0ba747e4d56db0de028f71a8', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 05:00:18'),
+(4, 850, 1, NULL, 'Online', 'Online', 1000.00, NULL, NULL, 'PayMongo', 'cs_d465ba67497409b4abb60042', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 05:03:30');
+
 -- --------------------------------------------------------
 
 --
@@ -297,7 +330,7 @@ INSERT INTO `payment_gateway_settings` (`setting_key`, `setting_value`, `descrip
 ('channel_gcash', '1', '1 to Enable, 0 to Disable GCash', '2026-08-12 12:49:45'),
 ('channel_maya', '1', '1 to Enable, 0 to Disable Maya', '2026-08-12 12:49:45'),
 ('fee_policy', 'pass_to_student', 'pass_to_student or absorb_by_school', '2026-08-12 12:49:45'),
-('gateway_mode', 'test', 'Set to live or test mode', '2026-08-12 12:49:45'),
+('gateway_mode', 'test', 'Set to live or test mode', '2026-08-20 10:58:30'),
 ('paymongo_public_key', '', 'PayMongo Public Key (Stored in .env)', '2026-08-12 12:49:45'),
 ('paymongo_secret_key', '', 'PayMongo Secret Key (Stored in .env)', '2026-08-12 12:49:45'),
 ('paymongo_webhook_secret', '', 'Webhook Secret (Stored in .env)', '2026-08-12 12:49:45');
@@ -390,7 +423,8 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`student_id`, `user_id`, `student_number`, `full_name`, `course`, `year_level`, `section`, `contact_number`, `status`, `created_at`, `last_sync_at`) VALUES
-(9, 9, 'S230000001', 'Student User', 'Unknown', '1', NULL, NULL, '', '2026-08-18 09:57:26', '2026-08-18 09:57:26');
+(9, 9, 'S230000001', 'Student User', 'Unknown', '1', NULL, NULL, '', '2026-08-18 09:57:26', '2026-08-18 09:57:26'),
+(850, 850, 'S230115569', 'Lebron James', 'Unknown', '1', NULL, NULL, '', '2026-08-20 02:59:11', '2026-08-20 02:59:18');
 
 --
 -- Indexes for dumped tables
@@ -576,7 +610,7 @@ ALTER TABLE `scholarships`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `student_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=851;
 
 --
 -- Constraints for dumped tables

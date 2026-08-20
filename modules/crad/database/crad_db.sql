@@ -3,13 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2026 at 06:16 PM
+-- Generation Time: Aug 20, 2026 at 02:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-CREATE DATABASE IF NOT EXISTS `crad_db`;
-USE `crad_db`;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
