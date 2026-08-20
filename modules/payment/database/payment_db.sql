@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 12, 2026 at 02:50 PM
+-- Generation Time: Aug 20, 2026 at 02:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -177,12 +177,12 @@ CREATE TABLE `fee_categories` (
 --
 
 INSERT INTO `fee_categories` (`category_id`, `category_name`, `priority_order`, `status`) VALUES
-(1, 'Tuition', 1, 'Active'),
-(2, 'Miscellaneous', 2, 'Active'),
+(1, 'Tuition', 6, 'Active'),
+(2, 'Miscellaneous', 1, 'Active'),
 (3, 'Laboratory & Computer', 3, 'Active'),
 (4, 'Student Council & Organization', 4, 'Active'),
-(5, 'Supplementary Fees', 5, 'Active'),
-(6, 'Other', 6, 'Active');
+(5, 'Supplementary Fees', 2, 'Active'),
+(6, 'Other', 5, 'Active');
 
 -- --------------------------------------------------------
 
@@ -264,6 +264,7 @@ DELIMITER ;
 
 CREATE TABLE `payment_concerns` (
   `concern_id` int(10) UNSIGNED NOT NULL,
+  `student_id` int(10) UNSIGNED NOT NULL,
   `payment_id` int(10) UNSIGNED DEFAULT NULL,
   `receipt_path` varchar(255) NOT NULL,
   `verification_status` enum('Pending','Verified','Rejected') DEFAULT 'Pending',
@@ -357,6 +358,13 @@ CREATE TABLE `scholarships` (
   `approved_at` timestamp NULL DEFAULT NULL
 ) ;
 
+--
+-- Dumping data for table `scholarships`
+--
+
+INSERT INTO `scholarships` (`scholarship_id`, `student_id`, `billing_id`, `approved_by`, `discount_amount`, `scholarship_name`, `discount_type`, `discount_percentage`, `status`, `approved_at`) VALUES
+(1, 9, 1, 4, 2962.50, 'Academic Excellence', 'Percentage', 50.00, 'Active', '2026-08-16 05:25:57');
+
 -- --------------------------------------------------------
 
 --
@@ -365,13 +373,24 @@ CREATE TABLE `scholarships` (
 
 CREATE TABLE `students` (
   `student_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `student_number` varchar(50) NOT NULL,
   `full_name` varchar(150) NOT NULL,
-  `course_id` varchar(100) DEFAULT NULL,
-  `year_level` varchar(20) DEFAULT NULL,
-  `status` varchar(50) DEFAULT 'Enrolled',
+  `course` varchar(100) NOT NULL,
+  `year_level` enum('1','2','3','4') NOT NULL,
+  `section` varchar(50) DEFAULT NULL,
+  `contact_number` varchar(20) DEFAULT NULL,
+  `status` enum('Enrolled','Not Enrolled','Graduated','Dropped') DEFAULT 'Not Enrolled',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `last_sync_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`student_id`, `user_id`, `student_number`, `full_name`, `course`, `year_level`, `section`, `contact_number`, `status`, `created_at`, `last_sync_at`) VALUES
+(9, 9, 'S230000001', 'Student User', 'Unknown', '1', NULL, NULL, '', '2026-08-18 09:57:26', '2026-08-18 09:57:26');
 
 --
 -- Indexes for dumped tables
@@ -440,7 +459,8 @@ ALTER TABLE `payment_allocations`
 --
 ALTER TABLE `payment_concerns`
   ADD PRIMARY KEY (`concern_id`),
-  ADD KEY `payment_id` (`payment_id`);
+  ADD KEY `payment_id` (`payment_id`),
+  ADD KEY `idx_payment_concerns_student` (`student_id`);
 
 --
 -- Indexes for table `payment_gateway_settings`
@@ -556,7 +576,7 @@ ALTER TABLE `scholarships`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `student_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
@@ -605,6 +625,7 @@ ALTER TABLE `payment_allocations`
 -- Constraints for table `payment_concerns`
 --
 ALTER TABLE `payment_concerns`
+  ADD CONSTRAINT `fk_payment_concerns_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `payment_concerns_ibfk_1` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`) ON DELETE SET NULL;
 
 --

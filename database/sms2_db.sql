@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2026 at 05:06 PM
+-- Generation Time: Aug 20, 2026 at 02:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1717,7 +1717,39 @@ INSERT INTO `activity_logs` (`id`, `user_id`, `user_name`, `role_key`, `action`,
 (1683, 54, 'Dr. Roberto M. Santos', 'adviser', 'logout', 'faculty', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-16 22:31:35'),
 (1684, 491, 'Dr. Jobert Valentino', 'panel', 'login', 'faculty', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-16 22:31:42'),
 (1685, 491, 'Dr. Jobert Valentino', 'panel', 'logout', 'faculty', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-16 22:52:16'),
-(1686, 54, 'Dr. Roberto M. Santos', 'adviser', 'login', 'faculty', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-16 22:52:22');
+(1686, 54, 'Dr. Roberto M. Santos', 'adviser', 'login', 'faculty', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-16 22:52:22'),
+(1687, 4, 'Finance', 'finance', 'logout', 'payment', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:10:39'),
+(1688, 1, 'Super Admin', 'superadmin', 'login', 'System', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:53:14'),
+(1689, 1, 'Super Admin', 'superadmin', 'create', 'user-management', 'Created user admin.finance', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:56:19'),
+(1690, 1, 'Super Admin', 'superadmin', 'create', 'user-management', 'Created user cashier', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:57:30'),
+(1691, 1, 'Super Admin', 'superadmin', 'logout', 'System', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:57:35'),
+(1692, 784, 'Alwyn James Duma', 'cashier', 'login', 'System', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:57:45'),
+(1693, 784, 'Alwyn James Duma', 'cashier', 'view', 'payment', 'Opened Security Settings', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:57:49'),
+(1694, 784, 'Alwyn James Duma', 'cashier', 'logout', 'System', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:58:10'),
+(1695, NULL, 'Mark Jelson Berdin', 'sms_admin', 'login', 'System', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:58:21'),
+(1696, NULL, 'Mark Jelson Berdin', 'sms_admin', 'view', 'payment', 'Opened Security Settings', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:58:29'),
+(1697, NULL, 'Mark Jelson Berdin', 'sms_admin', 'logout', 'System', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:58:54'),
+(1698, 1, 'Super Admin', 'superadmin', 'login', 'System', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:59:05'),
+(1699, 1, 'Super Admin', 'superadmin', 'update', 'user-management', 'Archived user #775 (status=inactive)', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:59:31'),
+(1700, 1, 'Super Admin', 'superadmin', 'delete', 'user-management', 'Permanently deleted archived user #775', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 09:59:35'),
+(1701, 1, 'Super Admin', 'superadmin', 'create', 'user-management', 'Created user admin.finance', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:00:15'),
+(1702, 1, 'Super Admin', 'superadmin', 'logout', 'System', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:00:19'),
+(1703, 833, 'Mark Jelson Berdin', 'finance', 'login', 'payment', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:00:28'),
+(1704, 833, 'Mark Jelson Berdin', 'finance', 'view', 'payment', 'Opened Security Settings', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:00:33'),
+(1705, 833, 'Mark Jelson Berdin', 'finance', 'logout', 'payment', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:12:07'),
+(1706, 1, 'Super Admin', 'superadmin', 'login_failed', 'System', 'Invalid password', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:12:16'),
+(1707, 1, 'Super Admin', 'superadmin', 'login', 'System', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:12:25'),
+(1708, 1, 'Super Admin', 'superadmin', 'logout', 'System', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:15:38'),
+(1709, 833, 'Mark Jelson Berdin', 'finance', 'login', 'payment', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:15:49'),
+(1710, 833, 'Mark Jelson Berdin', 'finance', 'logout', 'payment', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:16:48'),
+(1711, 1, 'Super Admin', 'superadmin', 'login_failed', 'System', 'Invalid password', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:17:00'),
+(1712, 1, 'Super Admin', 'superadmin', 'login', 'System', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:17:12'),
+(1713, 1, 'Super Admin', 'superadmin', 'create', 'user-management', 'Created user s230115569', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:18:25'),
+(1714, 1, 'Super Admin', 'superadmin', 'logout', 'System', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:18:28'),
+(1715, 850, 'Lebron James', 'student', 'login', 'student_portal', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:18:34');
+INSERT INTO `activity_logs` (`id`, `user_id`, `user_name`, `role_key`, `action`, `module_key`, `detail`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1716, 850, 'Lebron James', 'student', 'logout', 'student_portal', 'Logged out', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:32:01'),
+(1717, 833, 'Mark Jelson Berdin', 'finance', 'login', 'payment', 'Logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', '2026-08-19 10:32:11');
 
 -- --------------------------------------------------------
 
@@ -1816,7 +1848,8 @@ INSERT INTO `roles` (`id`, `role_key`, `label`, `description`, `is_system`, `cre
 (384, 'research_grant', 'CRAD Officer', 'Research grant management access', 1, '2026-08-10 20:01:49'),
 (770, 'grammarian', 'Grammarian', 'Research grammar and manuscript evaluation account', 1, '2026-08-14 11:06:49'),
 (788, 'panel', 'Panel Member', 'Research defense panel account', 1, '2026-08-15 17:07:16'),
-(800, 'sms_admin', 'Admin', 'General administrator account', 1, '2026-08-18 00:38:50');
+(800, 'sms_admin', 'Admin', 'General administrator account', 1, '2026-08-18 00:38:50'),
+(888, 'cashier', 'Cashier', 'Payment operational staff', 1, '2026-08-19 09:25:26');
 
 -- --------------------------------------------------------
 
@@ -1843,7 +1876,6 @@ INSERT INTO `role_permissions` (`id`, `role_key`, `module_key`, `granted`, `upda
 (197, 'registrar', 'registrar', 1, '2026-08-08 22:07:16'),
 (198, 'registrar', 'curriculum', 1, '2026-08-08 22:07:16'),
 (199, 'registrar', 'scheduling', 1, '2026-08-08 22:07:16'),
-(200, 'finance', 'payment', 1, '2026-08-08 22:07:16'),
 (201, 'hr', 'faculty', 1, '2026-08-08 22:07:16'),
 (202, 'adviser', 'faculty', 1, '2026-08-08 22:07:16'),
 (204, 'it_office', 'lms', 1, '2026-08-08 22:07:16'),
@@ -1860,12 +1892,32 @@ INSERT INTO `role_permissions` (`id`, `role_key`, `module_key`, `granted`, `upda
 (620, 'sms_admin', 'registrar', 1, '2026-08-18 00:38:50'),
 (621, 'sms_admin', 'curriculum', 1, '2026-08-18 00:38:50'),
 (622, 'sms_admin', 'accreditation', 1, '2026-08-18 00:38:50'),
-(623, 'sms_admin', 'payment', 1, '2026-08-18 00:38:50'),
 (624, 'sms_admin', 'faculty', 1, '2026-08-18 00:38:50'),
 (625, 'sms_admin', 'scheduling', 1, '2026-08-18 00:38:50'),
 (626, 'sms_admin', 'cocurricular', 1, '2026-08-18 00:38:50'),
 (627, 'sms_admin', 'lms', 1, '2026-08-18 00:38:50'),
-(628, 'sms_admin', 'crad', 1, '2026-08-18 00:38:50');
+(628, 'sms_admin', 'crad', 1, '2026-08-18 00:38:50'),
+(690, 'admin', 'payment.user_management', 1, '2026-08-19 09:25:26'),
+(691, 'admin', 'payment.fee_setup', 1, '2026-08-19 09:25:26'),
+(692, 'admin', 'payment.online_payment_config', 1, '2026-08-19 09:25:26'),
+(693, 'admin', 'payment.transaction_history_view', 1, '2026-08-19 09:25:26'),
+(694, 'admin', 'payment.collection_analytics_view', 1, '2026-08-19 09:25:26'),
+(695, 'cashier', 'payment.billing', 1, '2026-08-19 09:25:26'),
+(696, 'cashier', 'payment.collection', 1, '2026-08-19 09:25:26'),
+(697, 'cashier', 'payment.discount', 1, '2026-08-19 09:25:26'),
+(698, 'cashier', 'payment.ledger', 1, '2026-08-19 09:25:26'),
+(699, 'cashier', 'payment.analytics', 1, '2026-08-19 09:25:26'),
+(700, 'cashier', 'payment.concern_review', 1, '2026-08-19 09:25:26'),
+(701, 'student', 'payment.account_balance', 1, '2026-08-19 09:25:26'),
+(702, 'student', 'payment.history', 1, '2026-08-19 09:25:26'),
+(703, 'student', 'payment.online_payment', 1, '2026-08-19 09:25:26'),
+(704, 'student', 'payment.concern', 1, '2026-08-19 09:25:26'),
+(709, 'sms_admin', 'payment', 1, '2026-08-19 09:53:18'),
+(879, 'finance', 'payment', 1, '2026-08-19 10:12:32'),
+(880, 'finance', 'payment.fee_setup', 1, '2026-08-19 10:12:32'),
+(881, 'finance', 'payment.online_payment_config', 1, '2026-08-19 10:12:32'),
+(882, 'finance', 'payment.analytics', 1, '2026-08-19 10:12:32'),
+(883, 'finance', 'payment.ledger', 1, '2026-08-19 10:12:32');
 
 -- --------------------------------------------------------
 
@@ -1994,10 +2046,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `full_name`, `role_key`, `student_id`, `status`, `must_change_password`, `failed_login_attempts`, `locked_until`, `password_changed_at`, `last_login_at`, `last_seen_at`, `last_login_ip`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 'superadmin', 'kennethabejuela0308@gmail.com', '$2y$10$/RGwqzpAEAaLyP7pVvhRKeuDDpmD3HIa.IIRuiBH7.Pw7UUiLD8V.', 'Super Admin', 'superadmin', NULL, 'active', 0, 0, NULL, '2026-08-09 19:46:23', '2026-08-15 17:10:42', NULL, '::1', NULL, '2026-07-22 22:53:59', '2026-08-15 17:16:11'),
+(1, 'superadmin', 'kennethabejuela0308@gmail.com', '$2y$10$Vd8h.jtRRC.Wa5PPxODgue7QbKFM6Dx7ev7CG5eTWJUsMb80VTj8y', 'Super Admin', 'superadmin', NULL, 'active', 0, 0, NULL, '2026-08-09 19:46:23', '2026-08-19 10:17:12', NULL, '::1', NULL, '2026-07-22 22:53:59', '2026-08-19 10:18:28'),
 (2, 'registrar', 'registrar@bestlink.edu.ph', '$2y$10$QSecEV1xm5HFRWv2awHzTuqi2pOS4v1dhBROvrCxKjVXoZHMbBov.', 'Registrar', 'registrar', NULL, 'active', 0, 0, NULL, '2026-08-08 22:01:25', '2026-08-08 22:06:54', NULL, '::1', NULL, '2026-07-22 22:53:59', '2026-08-08 22:06:59'),
 (3, 'cradofficer', 'cradofficer@bestlink.ph', '$2y$10$MpwtxHnKofWTxV5/axRiPuudxLEFIdLJChvSoykU9poFiH/W9wRPK', 'CRAD Officer', 'crad_officer', NULL, 'active', 0, 0, NULL, '2026-08-06 13:31:50', '2026-08-16 21:27:33', NULL, '::1', NULL, '2026-07-22 22:53:59', '2026-08-16 21:27:42'),
-(4, 'finance', 'monvictortesiorna@gmail.com', '$2y$10$mOPKz95hA/OlTNHGzzgLEuvYqMBNAE1RdQFThECQjfv94o.RbvIZq', 'Finance', 'finance', NULL, 'active', 0, 0, NULL, '2026-08-06 20:20:39', '2026-08-11 17:31:31', NULL, '::1', NULL, '2026-07-22 22:54:00', '2026-08-11 17:31:39'),
+(4, 'finance', 'monvictortesiorna@gmail.com', '$2y$10$mOPKz95hA/OlTNHGzzgLEuvYqMBNAE1RdQFThECQjfv94o.RbvIZq', 'Finance', 'finance', NULL, 'active', 0, 0, NULL, '2026-08-06 20:20:39', '2026-08-11 17:31:31', NULL, '::1', NULL, '2026-07-22 22:54:00', '2026-08-19 09:10:39'),
 (5, 'studentaffairs', 'studentaffairs@bestlink.edu.ph', '$2y$10$QSPLuT09VAB/X8J02CRi3erPEuhgAR2fKNCg.YLaOY.o2mnRuULii', 'Student Affairs', 'osa', NULL, 'active', 0, 0, NULL, '2026-08-08 01:38:23', NULL, NULL, NULL, NULL, '2026-07-22 22:54:00', '2026-08-08 01:38:23'),
 (6, 'itofficer', 'itofficer@bestlink.edu.ph', '$2y$10$fIFFgaSnSssf4ZdaYupnZ.fzX6dYDfE7escqc/GMedxVZUHCaqCPe', 'IT Officer', 'it_office', NULL, 'active', 0, 0, NULL, '2026-07-22 22:54:00', NULL, NULL, NULL, NULL, '2026-07-22 22:54:00', '2026-07-22 22:54:00'),
 (7, 'qualityassurance', 'qualityassurance@bestlink.edu.ph', '$2y$10$Bm/Te5m0uFyTRDhDDV.lf.9HuUEe7qIUOfZtHXF2eufIIXL1N3IVC', 'Quality Assurance', 'qa', NULL, 'active', 0, 0, NULL, '2026-07-22 22:54:00', NULL, NULL, NULL, NULL, '2026-07-22 22:54:00', '2026-07-22 22:54:00'),
@@ -2012,7 +2064,10 @@ INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `full_name`, `r
 (491, 'jobert.valentino', 'jobertvalentino@bestlink.edu.ph', '$2y$10$1r/4Wf8PoTZ.OcKHzzPCA.UK8B6cNZ8l9VDXCeIjiE/iWklRjl...', 'Dr. Jobert Valentino', 'panel', NULL, 'active', 0, 0, NULL, '2026-08-15 17:12:05', '2026-08-16 22:31:42', NULL, '::1', NULL, '2026-08-15 17:07:16', '2026-08-16 22:52:16'),
 (492, 'jonathan.estrada', 'jonathanestrada@bestlink.edu.ph', '$2y$10$W6tscCbx8atD4zerWYFc4evBkQcVQH.TF1jcXTfdpHX11u8F.6hu.', 'Dr. Jonathan Estrada', 'panel', NULL, 'active', 0, 0, NULL, '2026-08-15 17:12:09', '2026-08-16 21:48:27', NULL, '::1', NULL, '2026-08-15 17:07:16', '2026-08-16 22:05:04'),
 (493, 'michelle.guevarra', 'michelleguevarra@bestlink.edu.ph', '$2y$10$BtapXdVV4SKsd7b.RZtYOeyHh0IcShf6FSHYdYtHEN47yFywXxLR.', 'Dr. Michelle Guevarra', 'panel', NULL, 'active', 0, 0, NULL, '2026-08-15 17:12:15', '2026-08-16 22:05:45', NULL, '::1', NULL, '2026-08-15 17:07:16', '2026-08-16 22:07:39'),
-(758, 'admin', 'admin@bestlink.edu.ph', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin', 'sms_admin', NULL, 'active', 0, 0, NULL, '2026-08-18 00:38:50', NULL, NULL, NULL, NULL, '2026-08-18 00:38:50', '2026-08-18 00:38:50');
+(758, 'admin', 'admin@bestlink.edu.ph', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin', 'sms_admin', NULL, 'active', 0, 0, NULL, '2026-08-18 00:38:50', NULL, NULL, NULL, NULL, '2026-08-18 00:38:50', '2026-08-18 00:38:50'),
+(784, 'cashier', 'cashier@bestlinkedu.ph', '$2y$10$Z8wyZAIbhG52wTWT/uYC8uA2bSbry9Npj3xlhXHse.tp3way9SK0G', 'Alwyn James Duma', 'cashier', NULL, 'active', 0, 0, NULL, '2026-08-19 09:57:30', '2026-08-19 09:57:45', NULL, '::1', NULL, '2026-08-19 09:57:30', '2026-08-19 09:58:10'),
+(833, 'admin.finance', 'markjelsonberdin28@gmail.com', '$2y$10$SbZrlMGG86V/JwbHl91V0ugc3/iJKTk6.mg4upWHJ3m0ESlS/ekaW', 'Mark Jelson Berdin', 'finance', NULL, 'active', 0, 0, NULL, '2026-08-19 10:00:15', '2026-08-19 10:32:11', '2026-08-19 11:38:23', '::1', NULL, '2026-08-19 10:00:15', '2026-08-19 11:38:23'),
+(850, 's230115569', 'student@bestlink.edu.ph', '$2y$10$bckTH/WkjuT6UjRTOZyg1OEWPs0xf1Z2jNPhUnVHqPg8KNVWl5dLy', 'Lebron James', 'student', 'S230115569', 'active', 0, 0, NULL, '2026-08-19 10:18:25', '2026-08-19 10:18:34', NULL, '::1', 'nyahhahaha', '2026-08-19 10:18:25', '2026-08-19 10:32:01');
 
 -- --------------------------------------------------------
 
@@ -2145,7 +2200,7 @@ ALTER TABLE `user_passkeys`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1687;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1718;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
@@ -2163,13 +2218,13 @@ ALTER TABLE `password_reset_requests`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=888;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=989;
 
 --
 -- AUTO_INCREMENT for table `role_permissions`
 --
 ALTER TABLE `role_permissions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=690;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=914;
 
 --
 -- AUTO_INCREMENT for table `security_otps`
@@ -2181,7 +2236,7 @@ ALTER TABLE `security_otps`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=587;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=859;
 
 --
 -- AUTO_INCREMENT for table `user_authenticators`
