@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 20, 2026 at 02:25 PM
+-- Generation Time: Aug 21, 2026 at 08:57 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -238,7 +238,11 @@ CREATE TABLE `payments` (
   `verified_by` int(10) UNSIGNED DEFAULT NULL,
   `transaction_type` enum('Walk-in','Online','Payment Concern') NOT NULL,
   `payment_method` enum('Walk-in','Online','Bank Transfer') NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
+  `amount` decimal(10,2) NOT NULL COMMENT 'Amount applied to the student balance',
+  `processing_fee` decimal(10,2) DEFAULT NULL COMMENT 'Gateway fee',
+  `checkout_total` decimal(10,2) DEFAULT NULL COMMENT 'Amount actually charged by PayMongo',
+  `category_id` int(11) DEFAULT NULL COMMENT 'ID of the designated fee category',
+  `checkout_session_id` varchar(255) DEFAULT NULL COMMENT 'PayMongo session ID',
   `cash_received` decimal(10,2) DEFAULT NULL,
   `change_amount` decimal(10,2) DEFAULT NULL,
   `payment_channel` enum('Cash','GCash','Maya','Visa','Mastercard','Bank','PayMongo') NOT NULL,
@@ -255,11 +259,12 @@ CREATE TABLE `payments` (
 -- Dumping data for table `payments`
 --
 
-INSERT INTO `payments` (`payment_id`, `student_id`, `billing_id`, `verified_by`, `transaction_type`, `payment_method`, `amount`, `cash_received`, `change_amount`, `payment_channel`, `reference_number`, `payment_status`, `payment_date`, `remarks`, `receipt_number`, `verified_at`, `created_at`) VALUES
-(1, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, 'PayMongo', 'cs_2dacbdbc128f5d0554eb7f8d', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 03:18:40'),
-(2, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, 'PayMongo', 'cs_c043903b4ebe585747f9ca92', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 03:27:25'),
-(3, 850, 1, NULL, 'Online', 'Online', 1000.00, NULL, NULL, 'PayMongo', 'cs_0ba747e4d56db0de028f71a8', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 05:00:18'),
-(4, 850, 1, NULL, 'Online', 'Online', 1000.00, NULL, NULL, 'PayMongo', 'cs_d465ba67497409b4abb60042', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 05:03:30');
+INSERT INTO `payments` (`payment_id`, `student_id`, `billing_id`, `verified_by`, `transaction_type`, `payment_method`, `amount`, `processing_fee`, `checkout_total`, `category_id`, `checkout_session_id`, `cash_received`, `change_amount`, `payment_channel`, `reference_number`, `payment_status`, `payment_date`, `remarks`, `receipt_number`, `verified_at`, `created_at`) VALUES
+(1, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, NULL, NULL, NULL, NULL, 'PayMongo', 'cs_2dacbdbc128f5d0554eb7f8d', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 03:18:40'),
+(2, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, NULL, NULL, NULL, NULL, 'PayMongo', 'cs_c043903b4ebe585747f9ca92', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 03:27:25'),
+(3, 850, 1, NULL, 'Online', 'Online', 1000.00, NULL, NULL, NULL, NULL, NULL, NULL, 'PayMongo', 'cs_0ba747e4d56db0de028f71a8', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 05:00:18'),
+(4, 850, 1, NULL, 'Online', 'Online', 1000.00, NULL, NULL, NULL, NULL, NULL, NULL, 'PayMongo', 'cs_d465ba67497409b4abb60042', 'Pending', '2026-08-20', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-20 05:03:30'),
+(5, 850, 1, NULL, 'Online', 'Online', 4975.00, NULL, NULL, NULL, NULL, NULL, NULL, 'PayMongo', 'cs_e91018d3280681c23399db3a', 'Pending', '2026-08-21', '{\"category_id\":\"2\",\"source\":\"PayMongo Checkout\"}', NULL, NULL, '2026-08-21 04:38:50');
 
 -- --------------------------------------------------------
 
@@ -326,14 +331,21 @@ CREATE TABLE `payment_gateway_settings` (
 --
 
 INSERT INTO `payment_gateway_settings` (`setting_key`, `setting_value`, `description`, `updated_at`) VALUES
-('channel_card', '1', '1 to Enable, 0 to Disable Credit/Debit Cards', '2026-08-12 12:49:45'),
-('channel_gcash', '1', '1 to Enable, 0 to Disable GCash', '2026-08-12 12:49:45'),
-('channel_maya', '1', '1 to Enable, 0 to Disable Maya', '2026-08-12 12:49:45'),
 ('fee_policy', 'pass_to_student', 'pass_to_student or absorb_by_school', '2026-08-12 12:49:45'),
-('gateway_mode', 'test', 'Set to live or test mode', '2026-08-20 10:58:30'),
+('gateway_mode', 'test', 'Set to live or test mode', '2026-08-21 04:31:51'),
+('live_channel_card', '0', '1 to Enable, 0 to Disable Credit/Debit Cards (Live)', '2026-08-21 03:51:32'),
+('live_channel_gcash', '0', '1 to Enable, 0 to Disable GCash (Live)', '2026-08-21 03:51:32'),
+('live_channel_maya', '0', '1 to Enable, 0 to Disable Maya (Live)', '2026-08-21 03:51:32'),
+('live_channel_qrph', '1', '1 to Enable, 0 to Disable QR Ph (Live)', '2026-08-21 03:57:32'),
 ('paymongo_public_key', '', 'PayMongo Public Key (Stored in .env)', '2026-08-12 12:49:45'),
 ('paymongo_secret_key', '', 'PayMongo Secret Key (Stored in .env)', '2026-08-12 12:49:45'),
-('paymongo_webhook_secret', '', 'Webhook Secret (Stored in .env)', '2026-08-12 12:49:45');
+('paymongo_webhook_secret', '', 'Webhook Secret (Stored in .env)', '2026-08-12 12:49:45'),
+('test_channel_card', '1', '1 to Enable, 0 to Disable Credit/Debit Cards', '2026-08-21 03:51:32'),
+('test_channel_gcash', '1', '1 to Enable, 0 to Disable GCash', '2026-08-21 03:51:32'),
+('test_channel_maya', '1', '1 to Enable, 0 to Disable Maya', '2026-08-21 03:51:32'),
+('test_channel_qrph', '1', '1 to Enable, 0 to Disable QR Ph (Test)', '2026-08-21 03:51:32'),
+('webhook_secret_live', '', NULL, '2026-08-21 06:05:13'),
+('webhook_secret_test', '', NULL, '2026-08-21 06:05:13');
 
 -- --------------------------------------------------------
 
@@ -424,7 +436,7 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`student_id`, `user_id`, `student_number`, `full_name`, `course`, `year_level`, `section`, `contact_number`, `status`, `created_at`, `last_sync_at`) VALUES
 (9, 9, 'S230000001', 'Student User', 'Unknown', '1', NULL, NULL, '', '2026-08-18 09:57:26', '2026-08-18 09:57:26'),
-(850, 850, 'S230115569', 'Lebron James', 'Unknown', '1', NULL, NULL, '', '2026-08-20 02:59:11', '2026-08-20 02:59:18');
+(850, 850, 'S230115569', 'Lebron James', 'Unknown', '1', NULL, NULL, 'Enrolled', '2026-08-20 02:59:11', '2026-08-20 12:31:59');
 
 --
 -- Indexes for dumped tables
@@ -474,6 +486,7 @@ ALTER TABLE `payments`
   ADD PRIMARY KEY (`payment_id`),
   ADD UNIQUE KEY `reference_number` (`reference_number`),
   ADD UNIQUE KEY `receipt_number` (`receipt_number`),
+  ADD UNIQUE KEY `checkout_session_id` (`checkout_session_id`),
   ADD KEY `student_id` (`student_id`),
   ADD KEY `billing_id` (`billing_id`),
   ADD KEY `idx_payment_status` (`payment_status`),
